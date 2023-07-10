@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-6">
+      <%= simple_form_for :filter, method: :get do |f| %>
+        <%= f.input :breed,
+                    as: :radio_buttons,
+                    collection: Cat.pluck(:breed).uniq,
+                    checked: params.dig(:filter, :breed) %>
+        <%= f.button :submit %>
+      <% end %>
+
+      <%= simple_form_for @adoption do |f| %>
+        <%= f.association :cat,
+                          collection: @cats.map{|cat| [render("label", cat: cat) ,cat.id]},
+                          input_html: {
+                            class: "sr-only"
+                          },
+                          as: :radio_buttons %>
+        <%= f.button :submit %>
+      <% end %>
+    </div>
+  </div>
+</div>
