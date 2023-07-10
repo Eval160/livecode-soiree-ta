@@ -1,23 +1,58 @@
 <div class="container">
   <div class="row justify-content-center">
-    <div class="col-6">
-      <%= simple_form_for :filter, method: :get do |f| %>
-        <%= f.input :breed,
-                    as: :radio_buttons,
-                    collection: Cat.pluck(:breed).uniq,
-                    checked: params.dig(:filter, :breed) %>
-        <%= f.button :submit %>
-      <% end %>
+    <div class="col-12 col-md-10">
+      <div class="my-card mt-5 my-form">
+        <div class="my-card__body">
+          <h2>Quel chat voulez-vous adopter?</h2>
+          <%= simple_form_for :filter,
+                              url: new_adoption_path,
+                              method: :get,
+                              html: {
+                                data: {
+                                  controller: "form-submit",
+                                  turbo_frame: "cat_list"
+                                  }
+                              } do |f| %>
 
-      <%= simple_form_for @adoption do |f| %>
-        <%= f.association :cat,
-                          collection: @cats.map{|cat| [render("label", cat: cat) ,cat.id]},
-                          input_html: {
-                            class: "sr-only"
-                          },
-                          as: :radio_buttons %>
-        <%= f.button :submit %>
-      <% end %>
+            <div class="btn-group">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuClickableInside" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                Races
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuClickableInside">
+                <%= f.input :breeds,
+                            legend_tag: false,
+                            as: :check_boxes,
+                            collection:  Cat.distinct.order(:breed).pluck(:breed),
+                            checked: params.dig(:filter,:breeds),
+                            item_wrapper_class: "dropdown-item",
+                            input_html: {
+                              data: {
+                                action: "form-submit#submit"
+                              }
+                            }%>
+
+              </div>
+            </div>
+          <% end %>
+          <%= simple_form_for @adoption do |f| %>
+            <%= turbo_frame_tag :cat_list do %>
+              <%= f.association :cat,
+                                legend_tag: false,
+                                as: :radio_buttons,
+                                collection: @cats.map{|cat| [render('label',cat: cat), cat.id]},
+                                wrapper_class: "d-flex overflow-auto py-2 position-relative",
+                                item_label_class: "custom-radio-label",
+                                item_wrapper_class: "flex-shrink-0 me-2",
+                                input_html: {
+                                  class:"sr-only"
+                                } %>
+              <% end %>
+            <div class="form-actions">
+              <%= f.button :submit, "Adopte-moi!", class:"btn btn-primary w-100" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
     </div>
   </div>
 </div>

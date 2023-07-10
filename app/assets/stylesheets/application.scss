@@ -10,7 +10,3 @@
 // Your CSS partials
 @import "components/index";
 @import "pages/index";
-
-input:checked + label {
-  border: 2px solid red;
-}

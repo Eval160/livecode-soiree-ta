@@ -1,0 +1,8 @@
+.custom-radio-label {
+  padding: 0.5rem;
+  border-radius: 3px;
+}
+
+input.form-check-input:checked + label.custom-radio-label {
+  background: #f4f4f4;
+}

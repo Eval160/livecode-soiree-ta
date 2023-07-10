@@ -1,11 +1,8 @@
 class AdoptionsController < ApplicationController
+  before_action :set_cats, only: [:new, :create]
+
   def new
     @adoption = Adoption.new
-    @cats = Cat.where.missing(:adoption)
-
-    if params.dig(:filter, :breed) #  => if params[:filter] && params[:filter][:breed]
-      @cats = @cats.where(breed: params[:filter][:breed])
-    end
   end
 
   def create
@@ -22,5 +19,14 @@ class AdoptionsController < ApplicationController
 
   def adoption_params
     params.require(:adoption).permit(:cat_id)
+  end
+
+  def set_cats
+    @cats = Cat.includes(photo_attachment: :blob)
+               .where.missing(:adoption)
+
+    if params.dig(:filter, :breeds) #  => if params[:filter] && params[:filter][:breeds]
+      @cats = @cats.where(breed: params[:filter][:breeds])
+    end
   end
 end

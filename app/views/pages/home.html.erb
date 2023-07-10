@@ -1,8 +1,33 @@
-<div class="container">
-  <div class="row">
-    <div class="col-6 my-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-10 my-5">
+          <div class="text-end">
+            <%= link_to "Nouvelle adoption", new_adoption_path, class: "btn btn-primary"  %>
+          </div>
 
-      <%= link_to "Adopter un chat", new_adoption_path, class: "btn btn-primary" %>
+          <h1>Mes adoptions</h1>
+          <section class="cats-list">
+            <% current_user.cats.each do |cat| %>
+              <article class="my-card">
+                <div class="my-card__image">
+                  <%= cl_image_tag cat.photo.key, width: 150 %>
+                </div>
+                <div class="my-card__body">
+                  <h5 class="my-card__name">
+                    <%= cat.name %>
+                  </h5>
+                  <div class="my-card__infos">
+                    <div class="my-2">
+                      <i class="fa-solid fa-cat"></i>
+                      <span>
+                        <%= cat.breed %>
+                      </span>
+                    </div>
+
+                  </div>
+                </div>
+              </article>
+            <% end %>
+          </ul>
     </div>
   </div>
 </div>
